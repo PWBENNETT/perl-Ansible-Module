@@ -21,8 +21,8 @@ sub import {
 sub new {
     my $class = ref($_[0]) ? ref(shift(@_)) : shift(@_);
     my ($args_ref) = @_;
-    my $opt_ref = Ansible::Module::Utils->getopt($args_ref);
-    return bless $opt_ref => $class;
+    my $opt_ref = Ansible::Module::Utils->getopt($args_ref->{ argument_spec });
+    return bless { %$args_ref, %$opt_ref } => $class;
 }
 
 sub exit_json {
@@ -46,6 +46,12 @@ sub fail_json {
     }
     say $json->encode($args_ref);
     exit 1;
+}
+
+sub sha1 {
+    my $self = shift;
+    my ($path) = @_;
+    ...
 }
 
 1;
