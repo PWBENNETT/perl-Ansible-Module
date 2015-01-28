@@ -70,14 +70,16 @@ sub getopt {
         $rv{ $k } = $v;
         delete $required{ $k };
     }
-    croak("Multiple values for " . join(', ', map { "'$_'" } @duplicate)) if @duplicate;
-    croak("Unexpected " . join(', ', map { "'$_'" } @spurious)) if @spurious;
+    my @errors;
+    push @errors, ("Multiple values for " . join(', ', map { "'$_'" } @duplicate)) if @duplicate;
+    push @errors, ("Unexpected " . join(', ', map { "'$_'" } @spurious)) if @spurious;
     for my $k (keys %default) {
         $rv{ $k } //= $default{ $k };
         delete $required{ $k };
     }
     my @missing = grep { !!$_ } keys %required;
-    croak("Missing " . join(', ', map { "'$_'" } @missing)) if @missing;
+    push @errors, ("Missing " . join(', ', map { "'$_'" } @missing)) if @missing;
+    croak(join "\n", @errors) if @errors;
     return \%rv;
 }
 
