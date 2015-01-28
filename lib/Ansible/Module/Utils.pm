@@ -81,21 +81,24 @@ sub getopt {
                 last;
             }
         }
-        unless ($valid) {
-            push @errors, "Invalid '$k' ($v)";
+        if (!$valid) {
+            if (!exists $rv{ $k }) {
+                push @errors, "Invalid '$k' ($v)";
+                delete $required{ $k };
+            }
             next;
         }
         $rv{ $k } = $v;
         delete $required{ $k };
     }
-    push @errors, ("Multiple values for " . join(', ', map { "'$_'" } @duplicate)) if @duplicate;
-    push @errors, ("Unexpected " . join(', ', map { "'$_'" } @spurious)) if @spurious;
+    push @errors, ("Multiple values for " . join(', ', map { "'$_'" } sort @duplicate)) if @duplicate;
+    push @errors, ("Unexpected " . join(', ', map { "'$_'" } sort @spurious)) if @spurious;
     for my $k (keys %default) {
         $rv{ $k } //= $default{ $k };
         delete $required{ $k };
     }
     my @missing = grep { !!$_ } keys %required;
-    push @errors, ("Missing " . join(', ', map { "'$_'" } @missing)) if @missing;
+    push @errors, ("Missing " . join(', ', map { "'$_'" } sort @missing)) if @missing;
     croak(join "\n", @errors) if @errors;
     return \%rv;
 }
