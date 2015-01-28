@@ -55,6 +55,7 @@ use overload (
     'qr' => 'regexify',
     '==' => 'compare',
     'eq' => 'compare',
+    'bool' => sub { return 1; },
     fallback => 0,
 );
 
@@ -80,6 +81,7 @@ use overload (
     'qr' => 'regexify',
     '==' => 'compare',
     'eq' => 'compare',
+    'bool' => sub { return; },
     fallback => 0,
 );
 
