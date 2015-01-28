@@ -24,6 +24,7 @@ sub False () {
 }
 
 sub getopt {
+    shift if $_[0] eq __PACKAGE__;
     my ($args_ref) = @_;
     my @opts = @ARGV;
     my %rv;
