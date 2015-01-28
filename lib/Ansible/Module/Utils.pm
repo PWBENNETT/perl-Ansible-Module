@@ -8,6 +8,8 @@ use Exporter qw( import );
 
 our @EXPORT = qw( BOOLEANS True False );
 
+our $errstr;
+
 sub BOOLEANS ();
 sub True ();
 sub False ();
@@ -27,6 +29,7 @@ sub False () {
 sub getopt {
     shift if $_[0] eq __PACKAGE__;
     my ($args_ref) = @_;
+    undef $errstr;
     my %required;
     my %default;
     my %alias;
@@ -99,7 +102,10 @@ sub getopt {
     }
     my @missing = grep { !!$_ } keys %required;
     push @errors, ("Missing " . join(', ', map { "'$_'" } sort @missing)) if @missing;
-    croak(join "\n", @errors) if @errors;
+    if (@errors) {
+        $errstr = join "\n", @errors;
+        return;
+    }
     return \%rv;
 }
 

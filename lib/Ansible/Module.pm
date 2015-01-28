@@ -22,7 +22,9 @@ sub new {
     my $class = ref($_[0]) ? ref(shift(@_)) : shift(@_);
     my ($args_ref) = @_;
     my $opt_ref = Ansible::Module::Utils->getopt($args_ref->{ argument_spec });
-    return bless { %$args_ref, %$opt_ref } => $class;
+    my $self = bless { %$args_ref, %$opt_ref } => $class;
+    $self->fail_json({ msg => $Ansible::Module::Utils::errstr }) if $Ansible::Module::Utils::errstr;
+    return $self;
 }
 
 sub exit_json {
