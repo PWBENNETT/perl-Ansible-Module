@@ -54,6 +54,7 @@ sub getopt {
     }
     my @opts = @ARGV;
     my %rv;
+    my @errors;
     my @spurious;
     my @duplicate;
     for my $opt (@opts) {
@@ -67,10 +68,26 @@ sub getopt {
             push @duplicate, $k;
             next;
         }
+        my $valid = !scalar @{$choices{ $k }};
+        for my $validator (@{$choices{ $k }}) {
+            if (ref $validator eq 'CODE') {
+                $valid ||= $validator->($v) and last;
+            }
+            elsif (ref $validator eq 'Regexp') {
+                $valid ||= $v =~ $validator and last;
+            }
+            elsif ($v eq $validator) {
+                $valid = 1;
+                last;
+            }
+        }
+        unless ($valid) {
+            push @errors, "Invalid '$k' ($v)";
+            next;
+        }
         $rv{ $k } = $v;
         delete $required{ $k };
     }
-    my @errors;
     push @errors, ("Multiple values for " . join(', ', map { "'$_'" } @duplicate)) if @duplicate;
     push @errors, ("Unexpected " . join(', ', map { "'$_'" } @spurious)) if @spurious;
     for my $k (keys %default) {
