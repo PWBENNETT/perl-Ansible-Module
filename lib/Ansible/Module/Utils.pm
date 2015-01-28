@@ -104,7 +104,7 @@ sub getopt {
     push @errors, ("Missing " . join(', ', map { "'$_'" } sort @missing)) if @missing;
     if (@errors) {
         $errstr = join "\n", @errors;
-        return;
+        return { };
     }
     return \%rv;
 }
