@@ -23,4 +23,14 @@ sub False () {
     return Ansible::Module::Booleans::False->new();
 }
 
+sub getopt {
+    my ($args_ref) = @_;
+    my @opts = @ARGV;
+    my %rv;
+    for my $opt (@opts) {
+        ...
+    }
+    return \%rv;
+}
+
 1;
