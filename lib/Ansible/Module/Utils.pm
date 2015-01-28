@@ -29,6 +29,7 @@ sub getopt {
     my @opts = @ARGV;
     my %rv;
     for my $opt (@opts) {
+        my ($k, $v) = split /=/, $opt, 2;
         ...
     }
     return \%rv;

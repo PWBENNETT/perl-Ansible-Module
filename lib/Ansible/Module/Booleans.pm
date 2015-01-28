@@ -19,8 +19,7 @@ sub regexify {
 sub compare {
     my ($lhs, $rhs, $swapped) = @_;
     ($lhs, $rhs) = ($rhs, $lhs) if $swapped;
-    no overload;
-    return $rhs =~ $lhs;
+    return $rhs =~ $lhs->[ 0 ];
 }
 
 1;
@@ -39,7 +38,7 @@ use overload (
 );
 
 {
-    my $singleton = bless qr/^(y|n|yes|no|true|false|1|0)$/i => __PACKAGE__;
+    my $singleton = bless [ qr/^(y|n|yes|no|true|false|1|0)$/i ] => __PACKAGE__;
     sub new { return $singleton }
 }
 
@@ -49,6 +48,7 @@ package Ansible::Module::Booleans::True;
 
 use 5.020;
 use utf8;
+use JSON::PP;
 use base qw( Ansible::Module::Booleans );
 
 use overload (
@@ -59,8 +59,12 @@ use overload (
 );
 
 {
-    my $singleton = bless qr/^(y|yes|true|1)$/i => __PACKAGE__;
+    my $singleton = bless [ qr/^(y|yes|true|1)$/i ] => __PACKAGE__;
     sub new { return $singleton }
+}
+
+sub TO_JSON {
+    return JSON::PP::true;
 }
 
 1;
@@ -69,6 +73,7 @@ package Ansible::Module::Booleans::False;
 
 use 5.020;
 use utf8;
+use JSON::PP;
 use base qw( Ansible::Module::Booleans );
 
 use overload (
@@ -79,8 +84,12 @@ use overload (
 );
 
 {
-    my $singleton = bless qr/^(n|no|false|0)$/i => __PACKAGE__;
+    my $singleton = bless [ qr/^(n|no|false|0)$/i ] => __PACKAGE__;
     sub new { return $singleton }
+}
+
+sub TO_JSON {
+    return JSON::PP::false;
 }
 
 1;
