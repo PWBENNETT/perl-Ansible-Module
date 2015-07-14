@@ -181,7 +181,9 @@ defaults, depending on context, or because of some lazier reason.
 =item C<default> => $some_value
 
 Specifies that your module implementation B<DOES> provide a sensible default
-for the argument.
+for the argument, and what that value is.
+
+=back
 
 =back
 
