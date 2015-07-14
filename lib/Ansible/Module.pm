@@ -104,7 +104,7 @@ The goal of the Ansible::Module distribution is to replicate Ansible's built-in
 Python ansible_Module() support in Perl, as fully and as compatibly as possible.
 
 Ansible Module implementations that use this module will be compatible with both
-v1.x (key/value pairs in @ARGV) and v2.x (JSON in $ARGV[0]) Ansible call APIs.
+v1.x (key/value pairs in @ARGV) and v2.x (JSON in @ARGV) Ansible call APIs.
 
 =head1 CONSTRUCTORS
 
