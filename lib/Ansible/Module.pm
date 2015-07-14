@@ -103,6 +103,9 @@ Version 0.001
 The goal of the Ansible::Module distribution is to replicate Ansible's built-in
 Python ansible_Module() support in Perl, as fully and as compatibly as possible.
 
+Ansible Module implementations that use this module will be compatible with both
+v1.x (key/value pairs in @ARGV) and v2.x (JSON in $ARGV[0]) Ansible call APIs.
+
 =head1 CONSTRUCTORS
 
 =over
@@ -143,10 +146,10 @@ then
 
 you B<MUST> check whether your implementation has been launched in check mode
 
-you B<MUST NOT> alter the system in any palpable way
+if so, then you B<MUST NOT> alter the system in any palpable way
 
-you B<MUST> (after checking whether changes would have been made) exit setting
-the C<changed> flag to either
+regardless, you B<MUST> (after checking whether changes would have been made)
+exit setting the C<changed> flag to either
 
 =over
 
@@ -188,6 +191,31 @@ for the argument, and what that value is.
 While it might be Perlish to assume an argument is required if there is not a
 default value for it, the C<argument_spec> is used to auto-generate the docs
 for your module implementation.
+
+B<ZERO OR MORE> of
+
+=over
+
+=item aliases => \@other_names
+
+Alternative names you're willing to accept for this argument.
+
+=item choices => \@validators
+
+Each validator may be a CODE ref or a Regexp ref (that is, the result of qr//
+rather than a bare Regexp). Technically speaking, each validator B<MUST> provide
+B<EXACTLY ONE> of "->()" or "=~" functionality, potentially via overload.
+
+A CODE ref validator is passed the Ansible::Module object and the value to be
+validated as C<$_[0]> and C<$_[1]> respectively, and should return a Perl
+boolean indicating whether C<$_[1]> is valid. Altering C<$_[1]> is (as always)
+possible, but inadvisable, not to mention downright impolite.
+
+A Regexp ref validator (or anything else that overloads "=~") B<MUST> either match
+or fail to match the value. At the current time, no use is made of C<$^R> for
+more subtle Regexp validation functionality, though tentative plans to do so
+(as well as to support politely changing C<$_[1]> in CODE ref validators) are in
+place.
 
 =back
 
