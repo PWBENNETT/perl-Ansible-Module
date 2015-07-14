@@ -185,6 +185,10 @@ for the argument, and what that value is.
 
 =back
 
+While it might be Perlish to assume an argument is required if there is not a
+default value for it, the C<argument_spec> is used to auto-generate the docs
+for your module implementation.
+
 =back
 
 =head1 OVERLOADED BOOLEAN CONSTANTS
