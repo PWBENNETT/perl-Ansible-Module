@@ -20,6 +20,9 @@ sub regexify {
 
 sub compare {
     my ($lhs, $rhs, $swapped) = @_;
+    if (eval { $rhs->isa(__PACKAGE__) }) {
+        $rhs = $rhs->[ 0 ];
+    }
     return $rhs =~ $lhs->[ 0 ];
 }
 
