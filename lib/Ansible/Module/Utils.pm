@@ -6,6 +6,8 @@ use utf8;
 use Carp qw( croak );
 use Exporter qw( import );
 
+use Ansible::Module::Booleans;
+
 our @EXPORT = qw( BOOLEANS True False );
 
 our $errstr;

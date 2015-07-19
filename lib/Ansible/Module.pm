@@ -4,19 +4,19 @@ use 5.020;
 use utf8;
 
 use Digest::SHA1 qw( sha1 );
+use Exporter qw( import );
 use IO::All;
+use JSON::PP;
 use POSIX;
 
-use Ansible::Module::JSON;
 use Ansible::Module::Utils;
 
+our @EXPORT = qw( BOOLEANS True False );
+
 our $VERSION = '0.001';
+our $json = JSON::PP->new();
 
 sub _finish ($$);
-
-sub import {
-    say $json->encode(\@_);
-}
 
 sub _finish ($$) {
     my ($exit_code, $args_ref) = @_;
@@ -83,8 +83,10 @@ Version 0.001
 
 =head1 SYNOPSIS
 
-    use Ansible::Module;
-    my $module = Ansible::Module->new(
+    package MyModule;
+    use base qw( Ansible::Module );
+
+    my $module = MyModule->new(
         argument_spec => {
             state     => { default => 'present', choices => ['present', 'absent'] },
             name      => { required => True },
@@ -113,10 +115,6 @@ v1.x (key/value pairs in @ARGV) and v2.x (JSON in @ARGV) Ansible call APIs.
 =item new(%OPTIONS)
 
 Create a new Ansible::Module object.
-
-B<NOTE> that it is also possible (with careful shenanigans) to derive your own
-classes from Ansible::Module. If you come up with a sane use-case, let me know
-and I'll try to incorporate more-usable code into the next release.
 
 =back
 
