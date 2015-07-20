@@ -20,10 +20,14 @@ sub regexify {
 
 sub compare {
     my ($lhs, $rhs, $swapped) = @_;
-    if (eval { $rhs->isa(__PACKAGE__) }) {
-        $rhs = $rhs->[ 0 ];
-    }
-    return $rhs =~ $lhs->[ 0 ];
+    ($lhs, $rhs) = ($rhs, $lhs) if $swapped;
+    $lhs = eval { "$lhs" } || $lhs;
+    $rhs = eval { "$rhs" } || $rhs;
+    return int (
+        ref $rhs
+        ? $lhs =~ $rhs->[ 0 ]
+        : eval { "$lhs" } eq eval { "$rhs" }
+    );
 }
 
 1;
@@ -65,7 +69,7 @@ use overload (
 );
 
 sub stringify {
-    return 1 == 1;
+    return int(1 == 1);
 }
 
 {
@@ -96,7 +100,7 @@ use overload (
 );
 
 sub stringify {
-    return 1 == 0;
+    return int(1 == 0);
 }
 
 {
