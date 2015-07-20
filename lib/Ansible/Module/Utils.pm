@@ -5,11 +5,13 @@ use utf8;
 
 use Carp qw( croak );
 use Exporter qw( import );
+use JSON::PP;
 
 use Ansible::Module::Booleans;
 
 our @EXPORT = qw( BOOLEANS True False );
 
+our $json = JSON::PP->new();
 our $errstr;
 
 sub BOOLEANS ();
@@ -57,13 +59,15 @@ sub getopt {
             $choices{ $k } = delete $args_ref->{ $k }->{ choices };
         }
     }
-    my @opts = @ARGV;
+    my %opthash
+        = eval { %{$json->decode(join ' ', @ARGV)} }
+        || (map { (split /=/, $_, 2) } @ARGV)
+        ;
     my %rv;
     my @errors;
     my @spurious;
     my @duplicate;
-    for my $opt (@opts) {
-        my ($k, $v) = split /=/, $opt, 2;
+    while (my ($k, $v) = each %opthash) {
         unless (exists $args_ref->{ $k } || exists $alias{ $k }) {
             push @spurious, $k;
             next;
