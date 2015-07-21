@@ -106,7 +106,7 @@ sub getopt {
         $rv{ $k } //= $default{ $k };
         delete $required{ $k };
     }
-    my @missing = grep { !!$_ } keys %required;
+    my @missing = keys %required;
     push @errors, ("Missing " . join(', ', map { "'$_'" } sort @missing)) if @missing;
     if (@errors) {
         $errstr = join "\n", @errors;
