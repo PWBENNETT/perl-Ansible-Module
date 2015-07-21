@@ -97,7 +97,7 @@ Version 0.001
     );
 
     if ($module->check_mode) {
-        $module->exit_json(changed => state_would_change());
+        $module->exit_json(changed => $module->state_would_change);
     }
 
 =head1 DESCRIPTION
