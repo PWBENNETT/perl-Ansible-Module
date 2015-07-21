@@ -26,7 +26,7 @@ sub _finish ($$) {
 
 sub new {
     my $class = ref($_[0]) ? ref(shift(@_)) : shift(@_);
-    my ($args_ref) = (@_ % 2) ? shift(@_) : { @_ };
+    my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     my $opt_ref = Ansible::Module::Utils->getopt($args_ref->{ argument_spec });
     my $self = bless { %$args_ref, %$opt_ref } => $class;
     $self->fail_json({ msg => $Ansible::Module::Utils::errstr }) if $Ansible::Module::Utils::errstr;
@@ -35,7 +35,7 @@ sub new {
 
 sub exit_json {
     my $self = shift;
-    my ($args_ref) = @_;
+    my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     if (!exists $args_ref->{ changed }) {
         $args_ref->{ changed } = True;
     }
@@ -44,7 +44,7 @@ sub exit_json {
 
 sub fail_json {
     my $self = shift;
-    my ($args_ref) = @_;
+    my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     my $rv
         = exists($args_ref->{ errno })
         ? $args_ref->{ errno } =~ /^-?\d+$/
