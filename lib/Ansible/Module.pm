@@ -29,11 +29,11 @@ sub new {
     my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     my $opt_ref = Ansible::Module::Utils->getopt($args_ref->{ argument_spec });
     my $self = bless { %$args_ref, %$opt_ref } => $class;
-    $self->fail_json({ msg => $Ansible::Module::Utils::errstr }) if $Ansible::Module::Utils::errstr;
+    $self->_fail_json({ msg => $Ansible::Module::Utils::errstr }) if $Ansible::Module::Utils::errstr;
     return $self;
 }
 
-sub exit_json {
+sub _exit_json {
     my $self = shift;
     my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     if (!exists $args_ref->{ changed }) {
@@ -42,7 +42,7 @@ sub exit_json {
     _finish 0, $args_ref;
 }
 
-sub fail_json {
+sub _fail_json {
     my $self = shift;
     my $args_ref = (@_ % 2) ? shift(@_) : { @_ };
     my $rv
@@ -214,6 +214,8 @@ or fail to match the value. At the current time, no use is made of C<$^R> for
 more subtle Regexp validation functionality, though tentative plans to do so
 (as well as to support politely changing C<$_[1]> in CODE ref validators) are in
 place.
+
+=back
 
 =back
 

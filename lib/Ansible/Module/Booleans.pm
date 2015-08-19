@@ -4,21 +4,21 @@ use 5.020;
 use utf8;
 
 use overload (
-    'qr' => 'regexify',
-    '==' => 'compare',
-    'eq' => 'compare',
+    'qr' => '_regexify',
+    '==' => '_compare',
+    'eq' => '_compare',
     fallback => 0,
 );
 
 use Carp qw( croak );
 
-sub regexify {
+sub _regexify {
     my ($self) = @_;
     use re 'eval';
     return qr/(?{Ansible::Module::Booleans::compare($self, "$_", 0)})/;
 }
 
-sub compare {
+sub _compare {
     my ($lhs, $rhs, $swapped) = @_;
     ($lhs, $rhs) = ($rhs, $lhs) if $swapped;
     $lhs = eval { "$lhs" } || $lhs;
@@ -39,9 +39,9 @@ use utf8;
 use base qw( Ansible::Module::Booleans );
 
 use overload (
-    'qr' => 'regexify',
-    '==' => 'compare',
-    'eq' => 'compare',
+    'qr' => '_regexify',
+    '==' => '_compare',
+    'eq' => '_compare',
     fallback => 0,
 );
 
@@ -60,9 +60,9 @@ use JSON::PP;
 use base qw( Ansible::Module::Booleans );
 
 use overload (
-    'qr' => 'regexify',
-    '==' => 'compare',
-    'eq' => 'compare',
+    'qr' => '_regexify',
+    '==' => '_compare',
+    'eq' => '_compare',
     '""' => 'stringify',
     'bool' => 'stringify',
     fallback => 0,
@@ -91,9 +91,9 @@ use JSON::PP;
 use base qw( Ansible::Module::Booleans );
 
 use overload (
-    'qr' => 'regexify',
-    '==' => 'compare',
-    'eq' => 'compare',
+    'qr' => '_regexify',
+    '==' => '_compare',
+    'eq' => '_compare',
     '""' => 'stringify',
     'bool' => 'stringify',
     fallback => 0,
@@ -113,3 +113,9 @@ sub TO_JSON {
 }
 
 1;
+
+=head1 NAME
+
+package Ansible::Module::Booleans - handle booleans.
+
+=cut
