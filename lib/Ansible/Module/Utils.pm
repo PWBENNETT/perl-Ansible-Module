@@ -125,7 +125,7 @@ Ansible::Module::Utils - utilities for Ansible::Module.
 
 =head2 BOOLEANS
 
-Returns all the booleands.
+Returns all the booleans.
 
 =head2 True
 
