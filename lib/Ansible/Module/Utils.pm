@@ -116,3 +116,29 @@ sub getopt {
 }
 
 1;
+
+=head1 NAME
+
+Ansible::Module::Utils - utilities for Ansible::Module.
+
+=head1 EXPORTS
+
+=head2 BOOLEANS
+
+Returns all the booleans.
+
+=head2 True
+
+Returns a true boolean value.
+
+=head2 False
+
+Returns a false boolean value.
+
+=head1 Functions.
+
+=head2 getopt
+
+B<To be discussed>.
+
+=cut
