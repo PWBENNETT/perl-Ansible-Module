@@ -15,7 +15,7 @@ use Carp qw( croak );
 sub _regexify {
     my ($self) = @_;
     use re 'eval';
-    return qr/(?{Ansible::Module::Booleans::compare($self, "$_", 0)})/;
+    return qr/(?{Ansible::Module::Booleans::_compare($self, "$_", 0)})/;
 }
 
 sub _compare {
