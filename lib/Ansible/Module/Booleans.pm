@@ -21,8 +21,6 @@ sub _regexify {
 sub _compare {
     my ($lhs, $rhs, $swapped) = @_;
     ($lhs, $rhs) = ($rhs, $lhs) if $swapped;
-    $lhs = eval { "$lhs" } || $lhs;
-    $rhs = eval { "$rhs" } || $rhs;
     return int (
         ref $rhs
         ? $lhs =~ $rhs->[ 0 ]
